@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String titleInput = mSearchTitle.getText().toString();
+                String userInput = mSearchTitle.getText().toString();
                 Intent intent = new Intent(MainActivity.this, MovieActivity.class);
-                intent.putExtra("titleInput", titleInput);
+                intent.putExtra("userInput", userInput);
                 startActivity(intent);
                 mSearchTitle.setText("");
             }
