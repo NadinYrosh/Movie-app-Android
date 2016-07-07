@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -20,6 +22,7 @@ import okhttp3.Response;
 public class MovieActivity extends AppCompatActivity {
     private static final String TAG = MovieActivity.class.getSimpleName();
     @Bind(R.id.tInput) TextView mTinput;
+    @Bind(R.id.listView) ListView mListView;
 
     public ArrayList<Movie> mMovies = new ArrayList<>();
 
@@ -49,16 +52,27 @@ public class MovieActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    String jsonData = response.body().string();
-                    if (response.isSuccessful()) {
-                        Log.v(TAG, jsonData);
-                        mMovies = movieService.processResults(response);
+            public void onResponse(Call call, Response response) {
+                mMovies = movieService.processResults(response);
+
+                MovieActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String[] movieNames = new String[mMovies.size()];
+                        for (int i = 0; i < movieNames.length; i++) {
+                            movieNames[i] = mMovies.get(i).getName();
+                        }
+
+                        ArrayAdapter adapter = new ArrayAdapter(MovieActivity.this,
+                                android.R.layout.simple_expandable_list_item_1, movieNames);
+                        mListView.setAdapter(adapter);
+
+                        for (Movie movie : mMovies) {
+                            Log.d(TAG, "Name: " + movie.getName());
+                            Log.d(TAG, "Overview: " + movie.getOverview());
+                        }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                });
             }
         });
     }
