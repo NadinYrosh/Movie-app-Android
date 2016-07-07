@@ -19,7 +19,7 @@ android {
     }
 
     buildTypes.each {
-        it.buildConfigField 'String', 'Movie_App_Key', MovieAppKey
+        it.buildConfigField 'String', 'Key', MovieAppKey
 
     }
 }

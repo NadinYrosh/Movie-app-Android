@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -20,6 +21,8 @@ public class MovieActivity extends AppCompatActivity {
     private static final String TAG = MovieActivity.class.getSimpleName();
     @Bind(R.id.tInput) TextView mTinput;
 
+    public ArrayList<Movie> mMovies = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +34,6 @@ public class MovieActivity extends AppCompatActivity {
         mTinput.setText("User input is : " + userInput);
 
         getMovies(userInput);
-
 
     }
 
@@ -50,7 +52,10 @@ public class MovieActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     String jsonData = response.body().string();
-                    Log.v(TAG, jsonData);
+                    if (response.isSuccessful()) {
+                        Log.v(TAG, jsonData);
+                        mMovies = movieService.processResults(response);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
