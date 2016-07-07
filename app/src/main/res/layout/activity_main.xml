@@ -34,8 +34,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
+        android:text="Search"
+        android:id="@+id/bSearch"
         android:layout_alignTop="@+id/etSearch"
         android:layout_alignLeft="@+id/tvLogo"
         android:layout_alignStart="@+id/tvLogo"
