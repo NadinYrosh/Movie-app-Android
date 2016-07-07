@@ -3,11 +3,15 @@ package com.epicodus.movieapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.epicodus.movieapp.adapters.MovieListAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,8 +25,9 @@ import okhttp3.Response;
 
 public class MovieActivity extends AppCompatActivity {
     private static final String TAG = MovieActivity.class.getSimpleName();
-    @Bind(R.id.tInput) TextView mTinput;
-    @Bind(R.id.listView) ListView mListView;
+
+    @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
+    private MovieListAdapter mAdapter;
 
     public ArrayList<Movie> mMovies = new ArrayList<>();
 
@@ -34,15 +39,14 @@ public class MovieActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String userInput = intent.getStringExtra("userInput");
-        mTinput.setText("User input is : " + userInput);
 
         getMovies(userInput);
 
     }
 
-
     private void getMovies(String userInput) {
         final MovieService movieService = new MovieService();
+
         MovieService.findMovies(userInput, new Callback() {
 
             @Override
@@ -56,21 +60,15 @@ public class MovieActivity extends AppCompatActivity {
                 mMovies = movieService.processResults(response);
 
                 MovieActivity.this.runOnUiThread(new Runnable() {
+
                     @Override
                     public void run() {
-                        String[] movieNames = new String[mMovies.size()];
-                        for (int i = 0; i < movieNames.length; i++) {
-                            movieNames[i] = mMovies.get(i).getName();
-                        }
-
-                        ArrayAdapter adapter = new ArrayAdapter(MovieActivity.this,
-                                android.R.layout.simple_expandable_list_item_1, movieNames);
-                        mListView.setAdapter(adapter);
-
-                        for (Movie movie : mMovies) {
-                            Log.d(TAG, "Name: " + movie.getName());
-                            Log.d(TAG, "Overview: " + movie.getOverview());
-                        }
+                        mAdapter = new MovieListAdapter(getApplicationContext(), mMovies);
+                        mRecyclerView.setAdapter(mAdapter);
+                        RecyclerView.LayoutManager layoutManager =
+                                new LinearLayoutManager(MovieActivity.this);
+                        mRecyclerView.setLayoutManager(layoutManager);
+                        mRecyclerView.setHasFixedSize(true);
                     }
                 });
             }
