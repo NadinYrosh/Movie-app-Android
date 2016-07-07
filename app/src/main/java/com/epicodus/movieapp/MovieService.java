@@ -47,7 +47,7 @@ public class MovieService {
                 for (int i = 0; i < resultsJSON.length(); i++) {
                     JSONObject movieJSON = resultsJSON.getJSONObject(i);
                     String name = movieJSON.getString("title");
-                    String poster = movieJSON.getString("poster_path");
+                    String poster = "https://image.tmdb.org/t/p/w300_and_h450_bestv2" + movieJSON.getString("poster_path");
                     String overview = movieJSON.getString("overview");
 
                     Movie movie = new Movie(name, poster, overview);

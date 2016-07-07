@@ -1,5 +1,7 @@
 package com.epicodus.movieapp;
 
+import android.util.Log;
+
 public class Movie {
     private String mName;
     private String mPoster;
@@ -9,6 +11,8 @@ public class Movie {
         this.mName = name;
         this.mPoster = poster;
         this.mOverview = overview;
+
+        Log.d("url", poster);
     }
 
     public String getName() {

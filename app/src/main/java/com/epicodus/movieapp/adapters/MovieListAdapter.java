@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.epicodus.movieapp.Movie;
 import com.epicodus.movieapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -43,7 +44,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder {
-      //  @Bind(R.id.movieImageView) ImageView mMovieImageView;
+        @Bind(R.id.movieImageView) ImageView mMovieImageView;
         @Bind(R.id.movieNameTextView) TextView mNameTextView;
         @Bind(R.id.overviewTextView) TextView mOverviewTextView;
 
@@ -58,6 +59,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         public void bindMovie(Movie movie) {
             mNameTextView.setText(movie.getName());
             mOverviewTextView.setText(movie.getOverview());
+            Picasso.with(mContext).load(movie.getPoster()).into(mMovieImageView);
         }
     }
 }
